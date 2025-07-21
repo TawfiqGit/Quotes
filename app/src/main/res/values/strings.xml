@@ -9,4 +9,8 @@
     <string name="contentDescription">contentDescription</string>
     <string name="button_add_a_quote">Add a quote</string>
     <string name="button_connection">Connection</string>
+    <string name="hint_quote">Quote</string>
+    <string name="hint_author">Author</string>
+    <string name="hint_year">Year</string>
+    <string name="button_add">Add</string>
 </resources>
