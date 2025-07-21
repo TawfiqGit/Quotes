@@ -7,4 +7,6 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="contentDescription">contentDescription</string>
+    <string name="button_add_a_quote">Add a quote</string>
+    <string name="button_connection">Connection</string>
 </resources>

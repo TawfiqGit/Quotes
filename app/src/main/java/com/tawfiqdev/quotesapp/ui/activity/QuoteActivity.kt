@@ -6,13 +6,13 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tawfiqdev.quotesapp.R
-import com.tawfiqdev.quotesapp.databinding.ActivityMainBinding
+import com.tawfiqdev.quotesapp.databinding.ActivityQuoteBinding
 import com.tawfiqdev.quotesapp.model.Quote
 import com.tawfiqdev.quotesapp.ui.adapter.QuoteRecyclerViewAdapter
 
-class MainActivity : AppCompatActivity() {
+class QuoteActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityQuoteBinding
 
     private val accountRecyclerviewAdapter: QuoteRecyclerViewAdapter by lazy {
         QuoteRecyclerViewAdapter()
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityQuoteBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         setupClickListeners()
@@ -28,16 +28,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupClickListeners() {
-        binding.fab.setOnClickListener {
 
-        }
     }
 
     private fun setupRecyclerView() {
         accountRecyclerviewAdapter.setData(listQuote())
 
         binding.contentMain.recyclerviewQuote.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
+            layoutManager = LinearLayoutManager(this@QuoteActivity)
             hasFixedSize()
             this.adapter = accountRecyclerviewAdapter
         }
