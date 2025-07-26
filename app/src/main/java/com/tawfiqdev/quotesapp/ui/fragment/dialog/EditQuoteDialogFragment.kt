@@ -12,9 +12,10 @@ class EditQuoteDialogFragment : DialogFragment(){
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val inflater: LayoutInflater = this.layoutInflater
-        val dialogView: View = inflater.inflate(R.layout.dialog_fragment_edit_quote, null)
-        return AlertDialog.Builder(requireContext()).apply {
-            setView(dialogView)
+        val view : View = inflater.inflate(R.layout.dialog_fragment_edit_quote, null)
+
+        return AlertDialog.Builder(requireContext(),R.style.QuoteDialog).apply {
+            setView(view)
         }.create()
     }
 

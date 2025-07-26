@@ -1,11 +1,6 @@
 <resources>
     <string name="app_name">QuotesApp</string>
     <string name="action_settings">Settings</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
     <string name="contentDescription">contentDescription</string>
     <string name="button_add_a_quote">Add a quote</string>
     <string name="button_connection">Connection</string>
@@ -13,4 +8,5 @@
     <string name="hint_author">Author</string>
     <string name="hint_year">Year</string>
     <string name="button_add">Add</string>
+    <string name="title_edit_a_quote">Edit a Quote</string>
 </resources>

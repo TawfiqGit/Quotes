@@ -1,5 +1,7 @@
 package com.tawfiqdev.quotesapp.ui.activity
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -9,6 +11,8 @@ import com.tawfiqdev.quotesapp.R
 import com.tawfiqdev.quotesapp.databinding.ActivityQuoteBinding
 import com.tawfiqdev.quotesapp.model.Quote
 import com.tawfiqdev.quotesapp.ui.adapter.QuoteRecyclerViewAdapter
+import com.tawfiqdev.quotesapp.ui.fragment.dialog.EditQuoteDialogFragment
+import androidx.core.graphics.drawable.toDrawable
 
 class QuoteActivity : AppCompatActivity() {
 
@@ -28,7 +32,9 @@ class QuoteActivity : AppCompatActivity() {
     }
 
     private fun setupClickListeners() {
-
+        binding.fab.setOnClickListener {
+            EditQuoteDialogFragment().show(supportFragmentManager, null)
+        }
     }
 
     private fun setupRecyclerView() {
