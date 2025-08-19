@@ -1,4 +1,4 @@
-package com.tawfiqdev.quotesapp.model
+package com.tawfiqdev.quotesapp.data
 
 data class Quote (
     val id : Int,

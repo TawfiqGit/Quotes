@@ -2,45 +2,40 @@ package com.tawfiqdev.quotesapp.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.tawfiqdev.quotesapp.databinding.ItemQuoteBinding
-import com.tawfiqdev.quotesapp.model.Quote
+import com.tawfiqdev.quotesapp.data.Quote
 
-class QuoteRecyclerViewAdapter : RecyclerView.Adapter<QuoteRecyclerViewAdapter.ViewHolder>() {
+class QuoteRecyclerViewAdapter(
+    private val onQuoteClick: (Quote) -> Unit = {}
+) : ListAdapter<Quote, QuoteRecyclerViewAdapter.ViewHolder>(DIFF) {
 
-    private val adapterData = mutableListOf<Quote>()
+    companion object {
+        val DIFF = object : DiffUtil.ItemCallback<Quote>() {
+            override fun areItemsTheSame(oldItem: Quote, newItem: Quote) = oldItem.id == newItem.id
+            override fun areContentsTheSame(oldItem: Quote, newItem: Quote) = oldItem == newItem
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = ItemQuoteBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(itemView)
+        val binding = ItemQuoteBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding, onQuoteClick)
     }
 
-    override fun getItemCount(): Int = adapterData.size
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val quote  = adapterData[position]
-        holder.bind(quote)
-
-        holder.itemView.setOnClickListener {
-
-        }
-    }
-
-    fun setData(data: List<Quote>) {
-        adapterData.apply {
-            clear()
-            addAll(data)
-        }
-    }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(getItem(position))
 
     class ViewHolder(
-        private val itemBinding: ItemQuoteBinding
+        private val itemBinding: ItemQuoteBinding,
+        private val onQuoteClick: (Quote) -> Unit
     ) : RecyclerView.ViewHolder(itemBinding.root) {
 
-        fun bind(quote: Quote){
+        fun bind(quote: Quote) {
             itemBinding.textContent.text = quote.content
             itemBinding.textAuthor.text = quote.author
             itemBinding.textYear.text = quote.year.toString()
+            itemBinding.root.setOnClickListener { onQuoteClick(quote) }
         }
     }
 }
