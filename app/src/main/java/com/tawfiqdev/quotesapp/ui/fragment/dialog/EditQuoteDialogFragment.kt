@@ -33,6 +33,7 @@ class EditQuoteDialogFragment : DialogFragment() {
 
             if (content.isNotEmpty() && author.isNotEmpty() && yearStr.isNotEmpty()) {
                 val year = yearStr.toIntOrNull()
+
                 if (year == null) {
                     Toast.makeText(requireContext(), "Année invalide", Toast.LENGTH_SHORT).show()
                 } else {

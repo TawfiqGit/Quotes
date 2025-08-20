@@ -1,79 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linearLayout"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/quoteItemRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="10dp"
     android:layout_marginStart="12dp"
     android:layout_marginEnd="10dp"
-    android:padding="8dp"
-    android:orientation="horizontal">
+    android:padding="8dp">
 
     <ImageView
-        android:id="@+id/iconAppearance"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="80"
-        android:src="@android:drawable/ic_delete"
-        android:contentDescription="@string/contentDescription" />
+        android:id="@+id/iconBestQuote"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:contentDescription="@string/contentDescription"
+        android:src="@drawable/ic_best"
+        android:adjustViewBounds="true"
+        android:scaleType="centerInside"
+        app:layout_constraintWidth_default="wrap"
+        app:layout_constraintHeight_min="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/contentContainer"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintHorizontal_weight="12" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        android:layout_weight="30">
+    <LinearLayout
+        android:id="@+id/contentContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintStart_toEndOf="@id/iconBestQuote"
+        app:layout_constraintEnd_toStartOf="@id/actionsContainer"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_weight="58">
 
         <TextView
             android:id="@+id/textContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:text="Ne jamais abandonner ses reves !"
+            android:ellipsize="end"
             android:textSize="18sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_below="@+id/textContent"
             android:layout_marginTop="4dp">
 
             <TextView
                 android:id="@+id/textAuthor"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="50"
-                android:text="Tawfiq"
-                android:textColor="@color/gray" />
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/gray"
+                android:singleLine="true"
+                android:ellipsize="end" />
 
             <TextView
                 android:id="@+id/textYear"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="50"
-                android:text="1995"
-                android:textColor="@color/gray" />
-
-            </LinearLayout>
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="70">
-
-        <RadioButton
-            android:id="@+id/radioButtonSuccess"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <RadioButton
-            android:id="@+id/radioButtonNoSuccess"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/gray"
+                android:singleLine="true"
+                android:ellipsize="end" />
+        </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/actionsContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="end|center_vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/contentContainer"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_weight="30">
+
+        <LinearLayout
+            android:id="@+id/actionsNumberContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textNumberSuccess"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="50"
+                android:text="3" />
+
+            <Space
+                android:layout_width="4dp"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/textNumberNoSuccess"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="50"
+                android:text="0" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/radioButtonContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radioButtonSuccess"
+                android:layout_width="53dp"
+                android:layout_height="53dp"
+                android:button="@null"
+                android:drawableTop="@drawable/radio_thumb_up_selector"
+                android:gravity="center"
+                android:text=""
+                android:layout_marginTop="-9dp"/>
+
+            <Space
+                android:layout_width="4dp"
+                android:layout_height="match_parent" />
+
+            <RadioButton
+                android:id="@+id/radioButtonNoSuccess"
+                android:layout_width="53dp"
+                android:layout_height="53dp"
+                android:button="@null"
+                android:drawableTop="@drawable/radio_thumb_down_selector"
+                android:gravity="center"
+                android:text=""
+                android:padding="9dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
