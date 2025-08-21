@@ -6,16 +6,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.tawfiqdev.quotesapp.databinding.ItemQuoteBinding
-import com.tawfiqdev.quotesapp.data.Quote
+import com.tawfiqdev.quotesapp.data.room.QuoteEntity
 
 class QuoteRecyclerViewAdapter(
-    private val onQuoteClick: (Quote) -> Unit = {}
-) : ListAdapter<Quote, QuoteRecyclerViewAdapter.ViewHolder>(DIFF) {
+    private val onQuoteClick: (QuoteEntity) -> Unit = {}
+) : ListAdapter<QuoteEntity, QuoteRecyclerViewAdapter.ViewHolder>(DIFF) {
 
     companion object {
-        val DIFF = object : DiffUtil.ItemCallback<Quote>() {
-            override fun areItemsTheSame(oldItem: Quote, newItem: Quote) = oldItem.id == newItem.id
-            override fun areContentsTheSame(oldItem: Quote, newItem: Quote) = oldItem == newItem
+        val DIFF = object : DiffUtil.ItemCallback<QuoteEntity>() {
+            override fun areItemsTheSame(oldItem: QuoteEntity, newItem: QuoteEntity) = oldItem.id == newItem.id
+            override fun areContentsTheSame(oldItem: QuoteEntity, newItem: QuoteEntity) = oldItem == newItem
         }
     }
 
@@ -28,14 +28,14 @@ class QuoteRecyclerViewAdapter(
 
     class ViewHolder(
         private val itemBinding: ItemQuoteBinding,
-        private val onQuoteClick: (Quote) -> Unit
+        private val onQuoteClick: (QuoteEntity) -> Unit
     ) : RecyclerView.ViewHolder(itemBinding.root) {
 
-        fun bind(quote: Quote) {
-            itemBinding.textContent.text = quote.content
-            itemBinding.textAuthor.text = quote.author
-            itemBinding.textYear.text = quote.year.toString()
-            itemBinding.root.setOnClickListener { onQuoteClick(quote) }
+        fun bind(quoteEntity: QuoteEntity) {
+            itemBinding.textContent.text = quoteEntity.content
+            itemBinding.textAuthor.text = quoteEntity.author
+            itemBinding.textYear.text = quoteEntity.year.toString()
+            itemBinding.root.setOnClickListener { onQuoteClick(quoteEntity) }
         }
     }
 }

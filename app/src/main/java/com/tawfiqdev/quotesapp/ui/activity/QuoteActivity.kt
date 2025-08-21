@@ -7,7 +7,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tawfiqdev.quotesapp.R
-import com.tawfiqdev.quotesapp.data.Quote
+import com.tawfiqdev.quotesapp.data.room.QuoteEntity
 import com.tawfiqdev.quotesapp.databinding.ActivityQuoteBinding
 import com.tawfiqdev.quotesapp.ui.adapter.QuoteRecyclerViewAdapter
 import com.tawfiqdev.quotesapp.ui.fragment.dialog.EditQuoteDialogFragment
@@ -58,7 +58,7 @@ class QuoteActivity : AppCompatActivity() {
             Log.i("Quote","observeDialogResults : $id, $icon, $content, $author, $year")
 
             val newList = quoteAdapter.currentList.toMutableList().apply {
-                add(Quote(id = id, icon = icon, content = content, author = author, year = year))
+                add(QuoteEntity(id = id, icon = icon, content = content, author = author, year = year))
             }
             quoteAdapter.submitList(newList) {
                 binding.contentMain.recyclerviewQuote.scrollToPosition(newList.lastIndex)
@@ -67,22 +67,22 @@ class QuoteActivity : AppCompatActivity() {
         }
     }
 
-    private fun listQuote(): List<Quote> = listOf(
-        Quote(
+    private fun listQuote(): List<QuoteEntity> = listOf(
+        QuoteEntity(
             id = 1,
             icon = 789,
             content = "Vivre n’est pas un crime",
             author = "Franky",
             year = 1995
         ),
-        Quote(
+        QuoteEntity(
             id = 2,
             icon = 789,
             content = "Le roi des pirates, ce sera moi !",
             author = "Monkey D. Luffy",
             year = 2001
         ),
-        Quote(
+        QuoteEntity(
             id = 3,
             icon = 789,
             content = "Ne pas voir la pourriture de ce monde est un plaisir uniquement connu des aveugles",
