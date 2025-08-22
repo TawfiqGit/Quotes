@@ -4,17 +4,31 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tawfiqdev.quotesapp.R
 import com.tawfiqdev.quotesapp.data.room.QuoteEntity
+import com.tawfiqdev.quotesapp.data.service.QuoteDatabaseService
 import com.tawfiqdev.quotesapp.databinding.ActivityQuoteBinding
 import com.tawfiqdev.quotesapp.ui.adapter.QuoteRecyclerViewAdapter
 import com.tawfiqdev.quotesapp.ui.fragment.dialog.EditQuoteDialogFragment
+import com.tawfiqdev.quotesapp.ui.presentation.QuoteViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+/**
+ *  Sert à attacher le conteneur Hilt local et permettre @Inject.
+ *  Seulement Activity, Fragment, Service... peuvent être attachés.
+ */
+@AndroidEntryPoint
 class QuoteActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityQuoteBinding
+
+    private val viewModel: QuoteViewModel by viewModels()
 
     private val quoteAdapter: QuoteRecyclerViewAdapter by lazy {
         QuoteRecyclerViewAdapter()
@@ -28,7 +42,20 @@ class QuoteActivity : AppCompatActivity() {
 
         setupRecyclerView()
         observeDialogResults()
+        observeQuotes()
         setupClickListeners()
+    }
+
+    /**
+     *  Room interdit d’appeler la DB sur le main thread (sinon IllegalStateException)
+     *  Flow + asLiveData(), toute modification (insert/delete/update) rafraîchit automatiquement la liste observée
+     */
+    private fun observeQuotes() {
+        viewModel.quotesLiveData.observe(this){ it ->
+            quoteAdapter.submitList(it) {
+                binding.contentMain.recyclerviewQuote.scrollToPosition(it.lastIndex)
+            }
+        }
     }
 
     private fun setupRecyclerView() {
@@ -37,7 +64,6 @@ class QuoteActivity : AppCompatActivity() {
             setHasFixedSize(true)
             adapter = quoteAdapter
         }
-        quoteAdapter.submitList(listQuote())
     }
 
     private fun setupClickListeners() {
@@ -55,41 +81,10 @@ class QuoteActivity : AppCompatActivity() {
             val author = bundle.getString(EditQuoteDialogFragment.ARG_AUTHOR).orEmpty()
             val year = bundle.getInt(EditQuoteDialogFragment.ARG_YEAR)
 
-            Log.i("Quote","observeDialogResults : $id, $icon, $content, $author, $year")
-
-            val newList = quoteAdapter.currentList.toMutableList().apply {
-                add(QuoteEntity(id = id, icon = icon, content = content, author = author, year = year))
-            }
-            quoteAdapter.submitList(newList) {
-                binding.contentMain.recyclerviewQuote.scrollToPosition(newList.lastIndex)
-                Log.i("Quote","submitList done. size=${newList.size}")
-            }
+            val newItem = QuoteEntity(id = id, icon = icon, content = content, author = author, year = year)
+            viewModel.addQuote(newItem)
         }
     }
-
-    private fun listQuote(): List<QuoteEntity> = listOf(
-        QuoteEntity(
-            id = 1,
-            icon = 789,
-            content = "Vivre n’est pas un crime",
-            author = "Franky",
-            year = 1995
-        ),
-        QuoteEntity(
-            id = 2,
-            icon = 789,
-            content = "Le roi des pirates, ce sera moi !",
-            author = "Monkey D. Luffy",
-            year = 2001
-        ),
-        QuoteEntity(
-            id = 3,
-            icon = 789,
-            content = "Ne pas voir la pourriture de ce monde est un plaisir uniquement connu des aveugles",
-            author = "Fujitora",
-            year = 1987
-        )
-    )
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -98,12 +93,8 @@ class QuoteActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_settings -> {
-                // Hook for settings action
-                true
-            }
+            R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
     }
-
 }

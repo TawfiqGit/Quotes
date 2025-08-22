@@ -2,19 +2,24 @@ package com.tawfiqdev.quotesapp.data.service
 
 import com.tawfiqdev.quotesapp.data.room.QuoteDao
 import com.tawfiqdev.quotesapp.data.room.QuoteEntity
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
+/***
+ * But = clean architecture (DAO → Service → ViewModel/UI).
+ * Ajouter des règles métier (ex: validation, logs, cache) avant d’appeler la DB.
+ * **/
 class QuoteDatabaseServiceImpl @Inject constructor(
     private val quoteDao: QuoteDao
 ) : QuoteDatabaseService {
 
-    override fun addNewQuote(quoteEntity: QuoteEntity) = quoteDao.addNewQuote(quoteEntity)
+    override suspend fun addNewQuote(quoteEntity: QuoteEntity) = quoteDao.addNewQuote(quoteEntity)
 
-    override fun getQuote(): List<QuoteEntity> = quoteDao.getQuote()
+    override suspend fun updateQuote(quoteEntity: QuoteEntity) = quoteDao.updateQuote(quoteEntity)
 
-    override fun updateQuote(quoteEntity: QuoteEntity) = quoteDao.updateQuote(quoteEntity)
+    override suspend fun deleteAllQuote() = quoteDao.deleteAllQuote()
 
-    override fun deleteAllQuote() = quoteDao.deleteAllQuote()
+    override suspend fun deleteQuoteById(id: Int) = quoteDao.deleteQuoteById(id)
 
-    override fun deleteQuoteById(id: Int) = quoteDao.deleteQuoteById(id)
+    override fun observeQuotes(): Flow<List<QuoteEntity>> = quoteDao.getQuote()
 }

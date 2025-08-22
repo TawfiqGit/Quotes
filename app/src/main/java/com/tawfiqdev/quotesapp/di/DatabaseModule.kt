@@ -10,6 +10,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+/***
+ * Sert à expliquer à Hilt comment construire QuoteDatabase et QuoteDao.*
+ * **/
 @InstallIn(SingletonComponent::class)
 @Module
 class DatabaseModule {

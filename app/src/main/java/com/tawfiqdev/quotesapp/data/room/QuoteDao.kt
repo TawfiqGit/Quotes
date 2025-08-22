@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface QuoteDao {
@@ -11,7 +12,7 @@ interface QuoteDao {
     fun addNewQuote(quoteEntity: QuoteEntity)
 
     @Query("SELECT * FROM quote_table")
-    fun getQuote(): List<QuoteEntity>
+    fun getQuote(): Flow<List<QuoteEntity>>
 
     @Update
     fun updateQuote(quoteEntity: QuoteEntity)
