@@ -4,21 +4,44 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tawfiqdev.quotesapp.R
-import com.tawfiqdev.quotesapp.data.Quote
+import com.tawfiqdev.quotesapp.data.model.SpinnerItem
+import com.tawfiqdev.quotesapp.data.room.QuoteEntity
 import com.tawfiqdev.quotesapp.databinding.ActivityQuoteBinding
 import com.tawfiqdev.quotesapp.ui.adapter.QuoteRecyclerViewAdapter
+import com.tawfiqdev.quotesapp.ui.adapter.SortBySpinnerAdapter
 import com.tawfiqdev.quotesapp.ui.fragment.dialog.EditQuoteDialogFragment
+import com.tawfiqdev.quotesapp.ui.presentation.QuoteViewModel
+import com.tawfiqdev.quotesapp.ui.presentation.SortType
+import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ *  Sert à attacher le conteneur Hilt local et permettre @Inject.
+ *  Seulement Activity, Fragment, Service... peuvent être attachés.
+ */
+@AndroidEntryPoint
 class QuoteActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityQuoteBinding
 
+    private val viewModel: QuoteViewModel by viewModels()
+
     private val quoteAdapter: QuoteRecyclerViewAdapter by lazy {
         QuoteRecyclerViewAdapter()
     }
+
+    private val spinnerItems = listOf(
+        SpinnerItem(R.drawable.ic_sort_by_az, "A-Z"),
+        SpinnerItem(R.drawable.ic_sort_by_az, "Z-A"),
+        SpinnerItem(R.drawable.ic_most_older, "Plus recent"),
+        SpinnerItem(R.drawable.ic_most_recent, "Plus ancien")
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,8 +50,31 @@ class QuoteActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         setupRecyclerView()
+        setupSpinner()
         observeDialogResults()
-        setupClickListeners()
+        observeQuotes(SortType.BY_AUTHOR_AZ)
+        setupAction()
+    }
+
+    private fun setupSpinner() {
+        val adapter = SortBySpinnerAdapter(
+            context = this,
+            items = spinnerItems
+        )
+        binding.contentAction.spinnerSort.setSelection(0)
+        binding.contentAction.spinnerSort.adapter = adapter
+    }
+
+    /**
+     *  Room interdit d’appeler la DB sur le main thread (sinon IllegalStateException)
+     *  Flow + asLiveData(), toute modification (insert/delete/update) rafraîchit automatiquement la liste observée
+     */
+    private fun observeQuotes(sortType: SortType) {
+        viewModel.quotesLiveData(sortType).observe(this){ it ->
+            quoteAdapter.submitList(it) {
+                binding.contentMain.recyclerviewQuote.scrollToPosition(it.lastIndex)
+            }
+        }
     }
 
     private fun setupRecyclerView() {
@@ -37,13 +83,25 @@ class QuoteActivity : AppCompatActivity() {
             setHasFixedSize(true)
             adapter = quoteAdapter
         }
-        quoteAdapter.submitList(listQuote())
     }
 
-    private fun setupClickListeners() {
+    private fun setupAction() {
         binding.contentAction.buttonAddQuote.setOnClickListener {
-            Log.i("Quote","Opening dialog")
             EditQuoteDialogFragment().show(supportFragmentManager, "EditQuoteDialog")
+        }
+
+        binding.contentAction.spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val sort = when (position) {
+                    0 -> SortType.BY_AUTHOR_AZ
+                    1 -> SortType.BY_AUTHOR_ZA
+                    2 -> SortType.BY_YEAR_ASC
+                    else -> SortType.BY_YEAR_DESC
+                }
+                observeQuotes(sort)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
         }
     }
 
@@ -55,41 +113,10 @@ class QuoteActivity : AppCompatActivity() {
             val author = bundle.getString(EditQuoteDialogFragment.ARG_AUTHOR).orEmpty()
             val year = bundle.getInt(EditQuoteDialogFragment.ARG_YEAR)
 
-            Log.i("Quote","observeDialogResults : $id, $icon, $content, $author, $year")
-
-            val newList = quoteAdapter.currentList.toMutableList().apply {
-                add(Quote(id = id, icon = icon, content = content, author = author, year = year))
-            }
-            quoteAdapter.submitList(newList) {
-                binding.contentMain.recyclerviewQuote.scrollToPosition(newList.lastIndex)
-                Log.i("Quote","submitList done. size=${newList.size}")
-            }
+            val newItem = QuoteEntity(id = id, icon = icon, content = content, author = author, year = year)
+            viewModel.addQuote(newItem)
         }
     }
-
-    private fun listQuote(): List<Quote> = listOf(
-        Quote(
-            id = 1,
-            icon = 789,
-            content = "Vivre n’est pas un crime",
-            author = "Franky",
-            year = 1995
-        ),
-        Quote(
-            id = 2,
-            icon = 789,
-            content = "Le roi des pirates, ce sera moi !",
-            author = "Monkey D. Luffy",
-            year = 2001
-        ),
-        Quote(
-            id = 3,
-            icon = 789,
-            content = "Ne pas voir la pourriture de ce monde est un plaisir uniquement connu des aveugles",
-            author = "Fujitora",
-            year = 1987
-        )
-    )
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -98,12 +125,8 @@ class QuoteActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_settings -> {
-                // Hook for settings action
-                true
-            }
+            R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
     }
-
 }

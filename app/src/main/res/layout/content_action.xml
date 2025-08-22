@@ -2,20 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/linearLayoutActionUser"
     android:layout_width="match_parent"
-    android:layout_height="48dp"
+    android:layout_height="wrap_content"
     android:padding="4dp"
     android:orientation="horizontal">
-
-    <Spinner
-        android:id="@+id/spinnerSort"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="60" />
 
     <Button
         android:id="@+id/buttonAddQuote"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="50"
         android:layout_marginStart="8dp"
         app:backgroundTint="@null"
@@ -26,7 +20,7 @@
     <Button
         android:id="@+id/buttonConnection"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="50"
         android:layout_marginStart="8dp"
         app:backgroundTint="@null"
@@ -34,5 +28,11 @@
         android:textAllCaps="false"
         android:textColor="@color/violet"
         android:background="@drawable/button_bar_disable" />
+
+    <Spinner
+        android:id="@+id/spinnerSort"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="60" />
 
 </LinearLayout>
