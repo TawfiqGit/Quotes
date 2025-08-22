@@ -21,5 +21,11 @@ class QuoteDatabaseServiceImpl @Inject constructor(
 
     override suspend fun deleteQuoteById(id: Int) = quoteDao.deleteQuoteById(id)
 
-    override fun observeQuotes(): Flow<List<QuoteEntity>> = quoteDao.getQuote()
+    override fun observeQuotesByAuthorAZ(): Flow<List<QuoteEntity>> = quoteDao.observeQuotesByAuthorAZ()
+
+    override fun observeQuotesByAuthorZA(): Flow<List<QuoteEntity>> = quoteDao.observeQuotesByAuthorZA()
+
+    override fun observeQuotesByYearNewest(): Flow<List<QuoteEntity>> = quoteDao.observeQuotesByYearNewest()
+
+    override fun observeQuotesByYearOldest(): Flow<List<QuoteEntity>> = quoteDao.observeQuotesByYearOldest()
 }

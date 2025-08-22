@@ -11,9 +11,6 @@ interface QuoteDao {
     @Insert
     fun addNewQuote(quoteEntity: QuoteEntity)
 
-    @Query("SELECT * FROM quote_table")
-    fun getQuote(): Flow<List<QuoteEntity>>
-
     @Update
     fun updateQuote(quoteEntity: QuoteEntity)
 
@@ -22,4 +19,16 @@ interface QuoteDao {
 
     @Query("DELETE FROM quote_table WHERE id = :id")
     fun deleteQuoteById(id: Int)
+
+    @Query("SELECT * FROM quote_table ORDER BY author ASC")
+    fun observeQuotesByAuthorAZ(): Flow<List<QuoteEntity>>
+
+    @Query("SELECT * FROM quote_table ORDER BY author DESC")
+    fun observeQuotesByAuthorZA(): Flow<List<QuoteEntity>>
+
+    @Query("SELECT * FROM quote_table ORDER BY year DESC, id DESC")
+    fun observeQuotesByYearNewest(): Flow<List<QuoteEntity>>
+
+    @Query("SELECT * FROM quote_table ORDER BY year ASC, id ASC")
+    fun observeQuotesByYearOldest(): Flow<List<QuoteEntity>>
 }

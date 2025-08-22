@@ -10,9 +10,20 @@ import kotlinx.coroutines.flow.Flow
  * suspend pour eviter le main thread
  */
 interface QuoteDatabaseService {
+
     suspend fun addNewQuote(quoteEntity: QuoteEntity)
+
     suspend fun updateQuote(quoteEntity: QuoteEntity)
+
     suspend fun deleteAllQuote()
+
     suspend fun deleteQuoteById(id: Int)
-    fun observeQuotes(): Flow<List<QuoteEntity>>
+
+    fun observeQuotesByAuthorAZ(): Flow<List<QuoteEntity>>
+
+    fun observeQuotesByAuthorZA(): Flow<List<QuoteEntity>>
+
+    fun observeQuotesByYearNewest(): Flow<List<QuoteEntity>>
+
+    fun observeQuotesByYearOldest(): Flow<List<QuoteEntity>>
 }

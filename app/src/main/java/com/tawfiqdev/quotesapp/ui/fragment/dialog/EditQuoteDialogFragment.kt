@@ -7,10 +7,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.setFragmentResult
 import com.tawfiqdev.quotesapp.R
 import com.tawfiqdev.quotesapp.databinding.DialogFragmentEditQuoteBinding
-import kotlin.random.Random
 
 class EditQuoteDialogFragment : DialogFragment() {
 

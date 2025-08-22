@@ -4,20 +4,22 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tawfiqdev.quotesapp.R
+import com.tawfiqdev.quotesapp.data.model.SpinnerItem
 import com.tawfiqdev.quotesapp.data.room.QuoteEntity
-import com.tawfiqdev.quotesapp.data.service.QuoteDatabaseService
 import com.tawfiqdev.quotesapp.databinding.ActivityQuoteBinding
 import com.tawfiqdev.quotesapp.ui.adapter.QuoteRecyclerViewAdapter
+import com.tawfiqdev.quotesapp.ui.adapter.SortBySpinnerAdapter
 import com.tawfiqdev.quotesapp.ui.fragment.dialog.EditQuoteDialogFragment
 import com.tawfiqdev.quotesapp.ui.presentation.QuoteViewModel
+import com.tawfiqdev.quotesapp.ui.presentation.SortType
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 /**
  *  Sert à attacher le conteneur Hilt local et permettre @Inject.
@@ -34,6 +36,13 @@ class QuoteActivity : AppCompatActivity() {
         QuoteRecyclerViewAdapter()
     }
 
+    private val spinnerItems = listOf(
+        SpinnerItem(R.drawable.ic_sort_by_az, "A-Z"),
+        SpinnerItem(R.drawable.ic_sort_by_az, "Z-A"),
+        SpinnerItem(R.drawable.ic_most_older, "Plus recent"),
+        SpinnerItem(R.drawable.ic_most_recent, "Plus ancien")
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityQuoteBinding.inflate(layoutInflater)
@@ -41,17 +50,27 @@ class QuoteActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         setupRecyclerView()
+        setupSpinner()
         observeDialogResults()
-        observeQuotes()
-        setupClickListeners()
+        observeQuotes(SortType.BY_AUTHOR_AZ)
+        setupAction()
+    }
+
+    private fun setupSpinner() {
+        val adapter = SortBySpinnerAdapter(
+            context = this,
+            items = spinnerItems
+        )
+        binding.contentAction.spinnerSort.setSelection(0)
+        binding.contentAction.spinnerSort.adapter = adapter
     }
 
     /**
      *  Room interdit d’appeler la DB sur le main thread (sinon IllegalStateException)
      *  Flow + asLiveData(), toute modification (insert/delete/update) rafraîchit automatiquement la liste observée
      */
-    private fun observeQuotes() {
-        viewModel.quotesLiveData.observe(this){ it ->
+    private fun observeQuotes(sortType: SortType) {
+        viewModel.quotesLiveData(sortType).observe(this){ it ->
             quoteAdapter.submitList(it) {
                 binding.contentMain.recyclerviewQuote.scrollToPosition(it.lastIndex)
             }
@@ -66,10 +85,23 @@ class QuoteActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupClickListeners() {
+    private fun setupAction() {
         binding.contentAction.buttonAddQuote.setOnClickListener {
-            Log.i("Quote","Opening dialog")
             EditQuoteDialogFragment().show(supportFragmentManager, "EditQuoteDialog")
+        }
+
+        binding.contentAction.spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val sort = when (position) {
+                    0 -> SortType.BY_AUTHOR_AZ
+                    1 -> SortType.BY_AUTHOR_ZA
+                    2 -> SortType.BY_YEAR_ASC
+                    else -> SortType.BY_YEAR_DESC
+                }
+                observeQuotes(sort)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
         }
     }
 
