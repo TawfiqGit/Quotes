@@ -14,10 +14,12 @@ import javax.inject.Singleton
  * Sans ce module, Hilt saurait instancier QuoteDatabaseServiceImpl,
  * mais il ne pourrait pas mapper vers QuoteDatabaseService
  * **/
-@Module
+
+@Module // Utilisée pour regrouper et fournir des dépendances
 @InstallIn(SingletonComponent::class)
 abstract class ServiceModule {
-    @Binds
+
+    @Binds // Fournir une implémentation d'une interface.
     @Singleton
     abstract fun bindQuoteDatabaseService(
         impl: QuoteDatabaseServiceImpl

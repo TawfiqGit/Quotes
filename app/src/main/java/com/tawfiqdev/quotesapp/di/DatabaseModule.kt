@@ -17,7 +17,7 @@ import javax.inject.Singleton
 @Module
 class DatabaseModule {
 
-    @Provides
+    @Provides //Créez l'objet vous-même
     fun provideQuoteDao(quoteDatabase: QuoteDatabase) = quoteDatabase.quoteDao()
 
     @Provides
