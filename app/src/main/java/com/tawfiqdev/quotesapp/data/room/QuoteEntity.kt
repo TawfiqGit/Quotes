@@ -10,5 +10,7 @@ data class QuoteEntity (
     @ColumnInfo(name = "icon") val icon : Int,
     @ColumnInfo(name = "content") val content : String,
     @ColumnInfo(name = "author") val author : String,
-    @ColumnInfo(name = "year") val year: Int
+    @ColumnInfo(name = "year") val year: Int,
+    @ColumnInfo(name = "thumbs_up") val thumbsUp: Int,
+    @ColumnInfo(name = "thumbs_down") val thumbsDown: Int,
 )

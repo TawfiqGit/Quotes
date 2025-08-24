@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/quoteItemRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -91,24 +92,22 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textNumberSuccess"
+                android:id="@+id/textNumberThumbUp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:layout_weight="50"
-                android:text="3" />
+                android:layout_weight="50" />
 
             <Space
                 android:layout_width="4dp"
                 android:layout_height="match_parent" />
 
             <TextView
-                android:id="@+id/textNumberNoSuccess"
+                android:id="@+id/textNumberThumbDown"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:layout_weight="50"
-                android:text="0" />
+                android:layout_weight="50" />
 
         </LinearLayout>
 
@@ -118,29 +117,37 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <RadioButton
-                android:id="@+id/radioButtonSuccess"
-                android:layout_width="53dp"
-                android:layout_height="53dp"
-                android:button="@null"
-                android:drawableTop="@drawable/radio_thumb_up_selector"
-                android:gravity="center"
-                android:text=""
-                android:layout_marginTop="-9dp"/>
+            <RadioGroup
+                android:id="@+id/radioGroupThumbState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:ignore="UselessParent">
 
-            <Space
-                android:layout_width="4dp"
-                android:layout_height="match_parent" />
+                <RadioButton
+                    android:id="@+id/radioButtonThumbUp"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:button="@null"
+                    android:drawableTop="@drawable/ic_thumbs_up"
+                    android:gravity="center"
+                    android:text=""
+                    android:layout_marginTop="-9dp"/>
 
-            <RadioButton
-                android:id="@+id/radioButtonNoSuccess"
-                android:layout_width="53dp"
-                android:layout_height="53dp"
-                android:button="@null"
-                android:drawableTop="@drawable/radio_thumb_down_selector"
-                android:gravity="center"
-                android:text=""
-                android:padding="9dp" />
+                <Space
+                    android:layout_width="4dp"
+                    android:layout_height="match_parent" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonThumbDown"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:button="@null"
+                    android:drawableTop="@drawable/ic_thumbs_down"
+                    android:gravity="center"
+                    android:text=""
+                    android:padding="9dp" />
+            </RadioGroup>
         </LinearLayout>
     </LinearLayout>
 

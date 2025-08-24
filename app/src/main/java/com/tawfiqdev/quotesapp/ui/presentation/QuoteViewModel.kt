@@ -1,15 +1,14 @@
 package com.tawfiqdev.quotesapp.ui.presentation
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.tawfiqdev.quotesapp.data.room.QuoteEntity
 import com.tawfiqdev.quotesapp.data.service.QuoteDatabaseService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,19 +34,31 @@ class QuoteViewModel @Inject constructor(
     fun quotesLiveData(sort: SortType): LiveData<List<QuoteEntity>> = source(sort).asLiveData()
 
     fun addQuote(item: QuoteEntity) {
-        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             service.addNewQuote(item)
         }
     }
 
+    fun onThumbUpClick(id: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            service.incrementThumbsUp(id)
+        }
+    }
+
+    fun onThumbDownClick(id: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            service.incrementThumbsDown(id)
+        }
+    }
+
     fun deleteById(id: Int) {
-        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             service.deleteQuoteById(id)
         }
     }
 
     fun clearAll() {
-        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             service.deleteAllQuote()
         }
     }

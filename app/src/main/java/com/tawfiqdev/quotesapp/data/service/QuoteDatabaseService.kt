@@ -19,6 +19,10 @@ interface QuoteDatabaseService {
 
     suspend fun deleteQuoteById(id: Int)
 
+    suspend fun incrementThumbsUp(id: Long)
+
+    suspend fun incrementThumbsDown(id: Long)
+
     fun observeQuotesByAuthorAZ(): Flow<List<QuoteEntity>>
 
     fun observeQuotesByAuthorZA(): Flow<List<QuoteEntity>>
