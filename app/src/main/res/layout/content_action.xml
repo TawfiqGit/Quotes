@@ -21,13 +21,24 @@
         android:id="@+id/buttonConnection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="50"
+        android:layout_weight="58"
         android:layout_marginStart="8dp"
         app:backgroundTint="@null"
-        android:text="@string/button_connection"
+        android:text="@string/button_login"
         android:textAllCaps="false"
         android:textColor="@color/violet"
         android:background="@drawable/button_bar_disable" />
+
+    <ImageButton
+        android:id="@+id/buttonClear"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="64"
+        android:layout_marginStart="8dp"
+        android:contentDescription="@string/contentDescription"
+        android:background="@drawable/button_bar_disable"
+        android:src="@drawable/ic_delete"
+        app:backgroundTint="@null" />
 
     <Spinner
         android:id="@+id/spinnerSort"

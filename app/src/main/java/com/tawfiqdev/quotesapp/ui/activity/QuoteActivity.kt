@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.tawfiqdev.quotesapp.R
 import com.tawfiqdev.quotesapp.data.model.SpinnerItem
 import com.tawfiqdev.quotesapp.data.room.QuoteEntity
@@ -33,7 +34,10 @@ class QuoteActivity : AppCompatActivity() {
     private val viewModel: QuoteViewModel by viewModels()
 
     private val quoteAdapter: QuoteRecyclerViewAdapter by lazy {
-        QuoteRecyclerViewAdapter()
+        QuoteRecyclerViewAdapter(
+            onUp = { viewModel.onThumbUpClick(it) },
+            onDown = { viewModel.onThumbDownClick(it) }
+        )
     }
 
     private val spinnerItems = listOf(
@@ -70,7 +74,7 @@ class QuoteActivity : AppCompatActivity() {
      *  Flow + asLiveData(), toute modification (insert/delete/update) rafraîchit automatiquement la liste observée
      */
     private fun observeQuotes(sortType: SortType) {
-        viewModel.quotesLiveData(sortType).observe(this){ it ->
+        viewModel.quotesLiveData(sortType).observe(this){
             quoteAdapter.submitList(it) {
                 binding.contentMain.recyclerviewQuote.scrollToPosition(it.lastIndex)
             }
@@ -103,6 +107,10 @@ class QuoteActivity : AppCompatActivity() {
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
+
+        binding.contentAction.buttonClear.setOnClickListener {
+            viewModel.clearAll()
+        }
     }
 
     private fun observeDialogResults() {
@@ -113,7 +121,9 @@ class QuoteActivity : AppCompatActivity() {
             val author = bundle.getString(EditQuoteDialogFragment.ARG_AUTHOR).orEmpty()
             val year = bundle.getInt(EditQuoteDialogFragment.ARG_YEAR)
 
-            val newItem = QuoteEntity(id = id, icon = icon, content = content, author = author, year = year)
+            val newItem = QuoteEntity(
+                id = id, icon = icon, content = content, author = author, year = year, thumbsUp = 0, thumbsDown = 0
+            )
             viewModel.addQuote(newItem)
         }
     }

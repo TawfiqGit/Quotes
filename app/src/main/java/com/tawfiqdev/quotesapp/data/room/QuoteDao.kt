@@ -31,4 +31,10 @@ interface QuoteDao {
 
     @Query("SELECT * FROM quote_table ORDER BY year ASC, id ASC")
     fun observeQuotesByYearOldest(): Flow<List<QuoteEntity>>
+
+    @Query("UPDATE quote_table SET thumbs_up = thumbs_up + 1 WHERE id = :id")
+    suspend fun incrementThumbsUp(id: Long)
+
+    @Query("UPDATE quote_table SET thumbs_down = thumbs_down + 1 WHERE id = :id")
+    suspend fun incrementThumbsDown(id: Long)
 }

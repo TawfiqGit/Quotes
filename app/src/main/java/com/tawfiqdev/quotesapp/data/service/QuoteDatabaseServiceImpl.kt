@@ -21,6 +21,10 @@ class QuoteDatabaseServiceImpl @Inject constructor(
 
     override suspend fun deleteQuoteById(id: Int) = quoteDao.deleteQuoteById(id)
 
+    override suspend fun incrementThumbsUp(id: Long) = quoteDao.incrementThumbsUp(id)
+
+    override suspend fun incrementThumbsDown(id: Long) =  quoteDao.incrementThumbsDown(id)
+
     override fun observeQuotesByAuthorAZ(): Flow<List<QuoteEntity>> = quoteDao.observeQuotesByAuthorAZ()
 
     override fun observeQuotesByAuthorZA(): Flow<List<QuoteEntity>> = quoteDao.observeQuotesByAuthorZA()

@@ -9,7 +9,8 @@ import com.tawfiqdev.quotesapp.databinding.ItemQuoteBinding
 import com.tawfiqdev.quotesapp.data.room.QuoteEntity
 
 class QuoteRecyclerViewAdapter(
-    private val onQuoteClick: (QuoteEntity) -> Unit = {}
+    private val onUp: (Long) -> Unit,
+    private val onDown: (Long) -> Unit
 ) : ListAdapter<QuoteEntity, QuoteRecyclerViewAdapter.ViewHolder>(DIFF) {
 
     companion object {
@@ -21,21 +22,33 @@ class QuoteRecyclerViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemQuoteBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding, onQuoteClick)
+        return ViewHolder(binding, onUp , onDown)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(getItem(position))
 
     class ViewHolder(
         private val itemBinding: ItemQuoteBinding,
-        private val onQuoteClick: (QuoteEntity) -> Unit
+        private val onUp: (Long) -> Unit,
+        private val onDown: (Long) -> Unit
     ) : RecyclerView.ViewHolder(itemBinding.root) {
 
         fun bind(quoteEntity: QuoteEntity) {
             itemBinding.textContent.text = quoteEntity.content
             itemBinding.textAuthor.text = quoteEntity.author
             itemBinding.textYear.text = quoteEntity.year.toString()
-            itemBinding.root.setOnClickListener { onQuoteClick(quoteEntity) }
+            itemBinding.textNumberThumbUp.text = quoteEntity.thumbsUp.toString()
+            itemBinding.textNumberThumbDown.text = quoteEntity.thumbsDown.toString()
+
+            itemBinding.radioButtonThumbUp.setOnClickListener {
+                onUp(quoteEntity.id.toLong())
+                itemBinding.radioButtonThumbUp.isChecked = false
+            }
+
+            itemBinding.radioButtonThumbDown.setOnClickListener {
+                onDown(quoteEntity.id.toLong())
+                itemBinding.radioButtonThumbDown.isChecked = false
+            }
         }
     }
 }
