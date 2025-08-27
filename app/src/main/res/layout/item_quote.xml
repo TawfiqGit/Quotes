@@ -5,8 +5,8 @@
     android:id="@+id/quoteItemRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="12dp"
-    android:layout_marginEnd="10dp"
+    android:layout_marginStart="14sp"
+    android:layout_marginEnd="14sp"
     android:padding="8dp">
 
     <ImageView

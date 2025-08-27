@@ -3,7 +3,7 @@
     android:id="@+id/linearLayoutActionUser"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="4dp"
+    android:padding="8dp"
     android:orientation="horizontal">
 
     <Button
@@ -17,23 +17,11 @@
         android:text="@string/button_add_a_quote"
         android:background="@drawable/button_bar_disable" />
 
-    <Button
-        android:id="@+id/buttonConnection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="58"
-        android:layout_marginStart="8dp"
-        app:backgroundTint="@null"
-        android:text="@string/button_login"
-        android:textAllCaps="false"
-        android:textColor="@color/violet"
-        android:background="@drawable/button_bar_disable" />
-
     <ImageButton
         android:id="@+id/buttonClear"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="64"
+        android:layout_weight="70"
         android:layout_marginStart="8dp"
         android:contentDescription="@string/contentDescription"
         android:background="@drawable/button_bar_disable"
@@ -44,6 +32,6 @@
         android:id="@+id/spinnerSort"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="60" />
-
+        android:layout_weight="70"
+        android:layout_marginStart="8dp" />
 </LinearLayout>
